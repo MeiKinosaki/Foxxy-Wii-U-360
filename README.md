@@ -2,11 +2,13 @@
 
 Projeto experimental para pesquisar a viabilidade de um emulador de Nintendo Wii U no Xbox 360 RGH/JTAG.
 
-## Estado do desenvolvimento — v0.1b
+## Estado atual
 
-A base C++ e o barramento de memória configurável estão no repositório. Também foi adicionado um decodificador PowerPC experimental que identifica um conjunto pequeno de opcodes (ADDI, ADDIS, ORI, ORIS, ANDI., B, BC e SC) e um alvo de testes separado. Esses componentes ainda precisam passar pela compilação e execução dos testes no CI antes de serem considerados validados.
+A branch `main` contém um barramento de memória configurável, carregamento de imagens de teste, decodificador PowerPC experimental e um primeiro executor de um subconjunto de instruções inteiras: `ADDI`, `ADDIS`, `ORI`, `ORIS`, `ANDI.` e desvio incondicional `B`. Foram adicionados testes para execução, PC e LR.
 
-A função `Emulator::step()` ainda não executa instruções. O decodificador apenas classifica campos básicos; não é um núcleo Espresso funcional. Não há GPU Latte, serviços Wii U, compatibilidade com jogos ou `default.xex` validado para Xbox 360.
+**Validação:** os testes de memória/decodificação passaram em execução anterior do GitHub Actions. O workflow do commit mais recente, que inclui execução de instruções, ainda está em andamento; não declarar esta mudança validada até ele terminar.
+
+Este é apenas um núcleo experimental inicial. Não há implementação completa da CPU Espresso, MMU/TLB, GPU Latte, serviços Wii U, áudio, compatibilidade com jogos ou `default.xex` validado para Xbox 360. Instruções não suportadas retornam falha; chamadas de sistema ainda não estão implementadas.
 
 ## Testes host-side
 
@@ -16,16 +18,14 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-O workflow em `.github/workflows/host-tests.yml` executa estes passos em push e pull request. O resultado remoto ainda precisa ser verificado. Uma compilação host-side não comprova compatibilidade com Xbox 360.
+Uma compilação host-side não comprova compatibilidade com Xbox 360.
 
-## Progressão sequencial
+## Próximas versões sequenciais
 
-- **v0.1b:** base C++ inicial.
-- **v0.2b (validação pendente):** mapa de memória configurável, permissões e carregador de imagens de teste.
-- **v0.3b (trabalho experimental adicionado, validação pendente):** decodificador PowerPC e vetores de teste.
-- **v0.4b:** semântica inicial da CPU, exceções e interrupções.
+- **v0.1b:** base inicial.
+- **v0.2b:** memória configurável e carregamento de imagens; aguarda validação completa do marco.
+- **v0.3b:** decodificador PowerPC e primeiro executor experimental; testes do commit mais recente pendentes.
+- **v0.4b:** completar semântica de instruções, branches condicionais, CR/XER/LR/CTR e falhas controladas.
 - **v0.5b:** interfaces de dispositivos e MMIO.
 
-O arquivo `docs/ROADMAP.md` organiza 1.000 tarefas planejadas em dez áreas. Isso não significa que as 1.000 tarefas já foram implementadas. A numeração de versão só avança após implementação e validação do marco correspondente.
-
-O projeto não inclui jogos, chaves nem firmware proprietários. Use apenas materiais obtidos legalmente.
+`docs/ROADMAP.md` contém 1.000 tarefas planejadas em dez áreas. Isso é um plano, não uma afirmação de que todas foram concluídas. A versão oficial só avança depois de testes aprovados e revisão do marco.
