@@ -2,11 +2,11 @@
 
 Projeto experimental para pesquisar a viabilidade de um emulador de Nintendo Wii U no Xbox 360 RGH/JTAG.
 
-## Estado atual — v0.1b
+## Estado do desenvolvimento — v0.1b
 
-A base C++ foi adicionada ao repositório: barramento de memória com acesso de 8/32 bits em big-endian, estado inicial de CPU, testes host-side e workflow de integração contínua. A função `Emulator::step()` ainda não executa instruções; portanto, isto **não é um emulador jogável**.
+A base C++ está no repositório, com barramento de memória, estado inicial de CPU, testes host-side e workflow do GitHub Actions. Foi iniciado o trabalho previsto para v0.2b: regiões de memória configuráveis, permissões de leitura/escrita e carregamento de imagens de teste.
 
-Ainda não há CPU Espresso funcional, GPU Latte, serviços Wii U, compatibilidade com jogos nem `default.xex` validado para Xbox 360.
+**A v0.2b ainda não está declarada concluída:** os testes e a compilação precisam ser validados antes de avançar a versão. A função `Emulator::step()` ainda não executa instruções. Não há CPU Espresso funcional, GPU Latte, serviços Wii U, compatibilidade com jogos ou `default.xex` validado para Xbox 360.
 
 ## Testes host-side
 
@@ -16,17 +16,16 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-O workflow GitHub Actions executa estes passos em push e pull request. Um teste host-side não comprova compatibilidade com o Xbox 360; os resultados do workflow devem ser consultados após a execução.
+O workflow em `.github/workflows/host-tests.yml` executa estes passos em push e pull request. Uma compilação host-side não comprova compatibilidade com Xbox 360.
 
 ## Progressão sequencial
 
-- **v0.1b (atual):** base C++, barramento inicial, testes e CI.
-- **v0.2b:** mapa de memória configurável e carregador de imagens de teste.
+- **v0.1b:** base C++ e testes iniciais.
+- **v0.2b (em desenvolvimento):** mapa de memória configurável, permissões e carregador de imagens de teste.
 - **v0.3b:** decodificador PowerPC experimental com vetores de teste.
 - **v0.4b:** semântica inicial da CPU, exceções e interrupções.
-- **v0.5b:** interfaces para dispositivos e MMIO.
-- **Etapas posteriores:** pesquisa da GPU Latte, áudio, controles, serviços de sistema, toolchain Xenon e validação de desempenho.
+- **v0.5b:** interfaces de dispositivos e MMIO.
 
-A lista de 1.000 tarefas em `docs/ROADMAP.md` é um plano de trabalho organizado em dez áreas. Ela não significa que mil tarefas já foram implementadas. A numeração de versão só avança depois que o marco correspondente estiver codificado e testado.
+O arquivo `docs/ROADMAP.md` organiza 1.000 tarefas planejadas em dez áreas. Isso não significa que as 1.000 tarefas já foram implementadas. A numeração de versão só avança após implementação e validação do marco correspondente.
 
 O projeto não inclui jogos, chaves nem firmware proprietários. Use apenas materiais obtidos legalmente.
