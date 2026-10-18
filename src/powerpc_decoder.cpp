@@ -13,6 +13,12 @@ DecodedInstruction decodePowerPC(std::uint32_t word) {
  case 24: d.kind = OpcodeKind::Ori; break;
  case 25: d.kind = OpcodeKind::Oris; break;
  case 28: d.kind = OpcodeKind::AndiDot; break;
+ case 32: d.kind = OpcodeKind::LoadWord; break;  // lwz
+ case 34: d.kind = OpcodeKind::LoadByte; break;  // lbz
+ case 40: d.kind = OpcodeKind::LoadHalf; break;  // lhz
+ case 36: d.kind = OpcodeKind::StoreWord; break; // stw
+ case 38: d.kind = OpcodeKind::StoreByte; break; // stb
+ case 44: d.kind = OpcodeKind::StoreHalf; break; // sth
  case 18: {
   d.kind = OpcodeKind::Branch;
   std::int32_t disp = static_cast<std::int32_t>(word & 0x03FFFFFCu);
