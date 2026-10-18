@@ -51,5 +51,25 @@ int main() {
  Emulator linked(64);
  check(linked.bus().write32be(0, 0x48000009u), "write branch-and-link");
  check(linked.step() && linked.cpu().pc == 8 && linked.cpu().lr == 4, "branch-and-link updates LR");
+ Emulator conditional(64);
+ const std::uint32_t bc_if_cr0_lt = (16u << 26) | (12u << 21) | 8u;
+ check(conditional.bus().write32be(0, bc_if_cr0_lt), "write conditional branch");
+ conditional.cpu().cr = 0x80000000u;
+ check(conditional.step() && conditional.cpu().pc == 8, "conditional branch taken from CR bit");
+ Emulator not_taken(64);
+ check(not_taken.bus().write32be(0, bc_if_cr0_lt), "write conditional branch not-taken case");
+ not_taken.cpu().cr = 0;
+ check(not_taken.step() && not_taken.cpu().pc == 4, "conditional branch not taken");
+ Emulator ctr_branch(64);
+ const std::uint32_t bc_ctr_nonzero = (16u << 26) | (16u << 21) | 8u;
+ check(ctr_branch.bus().write32be(0, bc_ctr_nonzero), "write CTR conditional branch");
+ ctr_branch.cpu().ctr = 2;
+ check(ctr_branch.step() && ctr_branch.cpu().pc == 8 && ctr_branch.cpu().ctr == 1, "CTR decremented and branch taken");
+ Emulator addis(64);
+ check(addis.bus().write32be(0, 0x3C600001u), "write addis");
+ check(addis.step() && addis.cpu().gpr[3] == 0x00010000u, "execute addis");
+ Emulator negative_addi(64);
+ check(negative_addi.bus().write32be(0, 0x3860FFFFu), "write negative addi");
+ check(negative_addi.step() && negative_addi.cpu().gpr[3] == 0xFFFFFFFFu, "sign extend addi immediate");
  std::cout << "Foxxy-Wii-U-360 memory tests passed.\n";
 }
