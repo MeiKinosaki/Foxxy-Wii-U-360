@@ -9,8 +9,10 @@ public:
  explicit MemoryBus(std::size_t size=2*1024*1024);
  bool mapRegion(std::uint32_t base,std::size_t size,bool readable=true,bool writable=true);
  bool read8(std::uint32_t address,std::uint8_t& value) const;
+ bool read16be(std::uint32_t address,std::uint16_t& value) const;
  bool read32be(std::uint32_t address,std::uint32_t& value) const;
  bool write8(std::uint32_t address,std::uint8_t value);
+ bool write16be(std::uint32_t address,std::uint16_t value);
  bool write32be(std::uint32_t address,std::uint32_t value);
  bool loadImage(std::uint32_t address,const std::vector<std::uint8_t>& image);
  std::size_t size() const noexcept;
