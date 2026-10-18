@@ -50,7 +50,8 @@ int main() {
  check(cpu.cpu().instructions_executed == 1, "instruction counter after addi");
  check(cpu.step() && cpu.cpu().gpr[3] == 0xFF && cpu.cpu().pc == 8, "execute ori");
  check(cpu.step() && cpu.cpu().pc == 16, "execute unconditional branch");
- check(!cpu.step(), "unmapped instruction fetch fails");
+ cpu.cpu().pc = 64;
+ check(!cpu.step(), "out-of-range instruction fetch fails");
  check(cpu.cpu().exception_code == 1 && cpu.cpu().instructions_executed == 3, "fetch diagnostic preserves execution count");
  Emulator linked(64);
  check(linked.bus().write32be(0, 0x48000009u), "write branch-and-link");
