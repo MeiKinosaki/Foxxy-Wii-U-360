@@ -75,5 +75,28 @@ int main() {
  Emulator negative_addi(64);
  check(negative_addi.bus().write32be(0, 0x3860FFFFu), "write negative addi");
  check(negative_addi.step() && negative_addi.cpu().gpr[3] == 0xFFFFFFFFu, "sign extend addi immediate");
+ Emulator memory_ops(128);
+ memory_ops.cpu().gpr[4] = 32;
+ check(memory_ops.bus().write32be(32, 0x12345678u), "seed load/store data");
+ check(memory_ops.bus().write32be(0, 0x80640000u), "write lwz");
+ check(memory_ops.bus().write32be(4, 0x90640004u), "write stw");
+ check(memory_ops.bus().write32be(8, 0x88A40000u), "write lbz");
+ check(memory_ops.bus().write32be(12, 0xA0C40002u), "write lhz");
+ check(memory_ops.bus().write32be(16, 0x98A40001u), "write stb");
+ check(memory_ops.bus().write32be(20, 0xB0C40006u), "write sth");
+ check(memory_ops.step() && memory_ops.cpu().gpr[3] == 0x12345678u, "execute lwz");
+ check(memory_ops.step(), "execute stw");
+ std::uint32_t stored_word = 0;
+ check(memory_ops.bus().read32be(36, stored_word) && stored_word == 0x12345678u, "stw writes big-endian word");
+ check(memory_ops.step() && memory_ops.cpu().gpr[5] == 0x12u, "execute lbz zero-extends byte");
+ check(memory_ops.step() && memory_ops.cpu().gpr[6] == 0x5678u, "execute lhz zero-extends halfword");
+ check(memory_ops.step(), "execute stb");
+ check(memory_ops.step(), "execute sth");
+ std::uint16_t stored_half = 0;
+ check(memory_ops.bus().read16be(38, stored_half) && stored_half == 0x5678u, "sth writes big-endian halfword");
+ Emulator data_fault(64);
+ check(data_fault.bus().write32be(0, 0x80640000u), "write faulting lwz");
+ data_fault.cpu().gpr[4] = 0x1000u;
+ check(!data_fault.step() && data_fault.cpu().exception_code == 3 && data_fault.cpu().pc == 0, "load fault reports data-read exception without advancing PC");
  std::cout << "Foxxy-Wii-U-360 memory tests passed.\n";
 }
