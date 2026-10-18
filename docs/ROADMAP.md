@@ -1,13 +1,13 @@
 # Foxxy-Wii-U-360 roadmap
 
-Current official milestone: **v0.1b**. The recent CI failure was traced to duplicate declarations in `tests/test_decoder.cpp`; that compile error has been fixed. The current patch adds instruction-count diagnostics and explicit error codes for failed instruction fetches (1) and unsupported opcodes (2). The newest executor/test commits are queued in CI and are not yet validated.
+Current official milestone: **v0.1b**. Recent CI failures exposed test assumptions about unmapped instruction fetches; the test was corrected to place PC outside mapped memory. The experimental core now includes LWZ/LBZ/LHZ/STW/STB/STH and big-endian 8/16/32-bit bus access, with diagnostics for fetch (1), unsupported opcode (2), read fault (3), and write fault (4). The expanded CI run is pending; do not mark the milestone validated until it passes.
 
 ## 1,000 tracked engineering tasks
 This is a plan, not a claim that 1,000 tasks are implemented. Ten workstreams contain 100 tasks each.
 1. Build, repository and CI (001–100): host build, warnings, CI and reproducibility.
 2. Memory bus and address map (101–200): configurable regions, permissions, bounds, image loading and tests.
 3. Espresso/PowerPC decoder research (201–300): opcode tables, field extraction, signed branch displacements and test vectors.
-4. CPU execution core (301–400): supported integer instructions, conditional/unconditional branches, CR/XER/LR/CTR, instruction accounting and controlled failure diagnostics.
+4. CPU execution core (301–400): supported integer instructions, conditional/unconditional branches, LWZ/LBZ/LHZ/STW/STB/STH, CR/XER/LR/CTR, instruction accounting and controlled failure diagnostics.
 5. MMU and memory protection (401–500): translation research, TLB and faults.
 6. Wii U device/MMIO model (501–600): register interfaces, interrupt routing and DMA abstraction.
 7. GPU/graphics research (601–700): Latte command parsing, shader feasibility and output abstraction.
