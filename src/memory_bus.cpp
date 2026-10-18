@@ -46,6 +46,14 @@ bool MemoryBus::read8(std::uint32_t a, std::uint8_t& v) const {
  return true;
 }
 
+bool MemoryBus::read16be(std::uint32_t a, std::uint16_t& v) const {
+ const auto* r = findRegion(a, 2, false);
+ if (!r) return false;
+ const auto i = a - r->info.base;
+ v = (std::uint16_t(r->bytes[i]) << 8) | std::uint16_t(r->bytes[i + 1]);
+ return true;
+}
+
 bool MemoryBus::read32be(std::uint32_t a, std::uint32_t& v) const {
  const auto* r = findRegion(a, 4, false);
  if (!r) return false;
@@ -61,6 +69,15 @@ bool MemoryBus::write8(std::uint32_t a, std::uint8_t v) {
  auto* r = findRegion(a, 1, true);
  if (!r) return false;
  r->bytes[a - r->info.base] = v;
+ return true;
+}
+
+bool MemoryBus::write16be(std::uint32_t a, std::uint16_t v) {
+ auto* r = findRegion(a, 2, true);
+ if (!r) return false;
+ const auto i = a - r->info.base;
+ r->bytes[i] = std::uint8_t(v >> 8);
+ r->bytes[i + 1] = std::uint8_t(v);
  return true;
 }
 
