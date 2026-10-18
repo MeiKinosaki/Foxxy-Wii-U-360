@@ -45,6 +45,25 @@ bool Emulator::step() {
   cpu_.pc = d.absolute ? static_cast<std::uint32_t>(d.branch_displacement)
                        : cpu_.pc + static_cast<std::uint32_t>(d.branch_displacement);
   return true;
+ case OpcodeKind::BranchConditional: {
+  const std::uint8_t bo = d.branch_options;
+  bool ctr_ok = true;
+  if ((bo & 0x04u) == 0) {
+   --cpu_.ctr;
+   ctr_ok = ((cpu_.ctr != 0) != ((bo & 0x02u) != 0));
+  }
+  bool cond_ok = true;
+  if ((bo & 0x10u) == 0) {
+   const bool cr_bit = ((cpu_.cr >> (31u - d.condition_bit)) & 1u) != 0;
+   cond_ok = cr_bit == ((bo & 0x08u) != 0);
+  }
+  if (d.link) cpu_.lr = next_pc;
+  cpu_.pc = (ctr_ok && cond_ok)
+    ? (d.absolute ? static_cast<std::uint32_t>(d.branch_displacement)
+                  : cpu_.pc + static_cast<std::uint32_t>(d.branch_displacement))
+    : next_pc;
+  return true;
+ }
  default:
   return false;
  }
