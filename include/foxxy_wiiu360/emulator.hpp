@@ -1,5 +1,6 @@
 #pragma once
 #include "foxxy_wiiu360/memory_bus.hpp"
+#include "foxxy_wiiu360/powerpc_decoder.hpp"
 #include <array>
 #include <cstdint>
 namespace foxxy_wiiu360 {
