@@ -4,8 +4,10 @@ namespace foxxy_wiiu360 {
 Emulator::Emulator(std::size_t memory_size) : bus_(memory_size) {}
 bool Emulator::step() {
  if (cpu_.halted) return false;
+ cpu_.exception_pc = cpu_.pc;
+ cpu_.exception_code = 0;
  std::uint32_t word = 0;
- if (!bus_.read32be(cpu_.pc, word)) return false;
+ if (!bus_.read32be(cpu_.pc, word)) { cpu_.exception_code = 1; return false; }
  const auto d = decodePowerPC(word);
  const std::uint32_t next_pc = cpu_.pc + 4u;
  const std::int32_t simm = static_cast<std::int16_t>(d.immediate);
@@ -14,6 +16,7 @@ bool Emulator::step() {
   const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
   cpu_.gpr[d.rt] = base + static_cast<std::uint32_t>(simm);
   cpu_.pc = next_pc;
+  ++cpu_.instructions_executed;
   return true;
  }
  case OpcodeKind::Addis: {
@@ -44,6 +47,7 @@ bool Emulator::step() {
   if (d.link) cpu_.lr = next_pc;
   cpu_.pc = d.absolute ? static_cast<std::uint32_t>(d.branch_displacement)
                        : cpu_.pc + static_cast<std::uint32_t>(d.branch_displacement);
+  ++cpu_.instructions_executed;
   return true;
  case OpcodeKind::BranchConditional: {
   const std::uint8_t bo = d.branch_options;
@@ -62,9 +66,11 @@ bool Emulator::step() {
     ? (d.absolute ? static_cast<std::uint32_t>(d.branch_displacement)
                   : cpu_.pc + static_cast<std::uint32_t>(d.branch_displacement))
     : next_pc;
+  ++cpu_.instructions_executed;
   return true;
  }
  default:
+  cpu_.exception_code = 2;
   return false;
  }
 }
