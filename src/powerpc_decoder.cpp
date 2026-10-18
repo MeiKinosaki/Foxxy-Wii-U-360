@@ -24,6 +24,8 @@ DecodedInstruction decodePowerPC(std::uint32_t word) {
  }
  case 16: {
   d.kind = OpcodeKind::BranchConditional;
+  d.branch_options = static_cast<std::uint8_t>((word >> 21) & 31u);
+  d.condition_bit = static_cast<std::uint8_t>((word >> 16) & 31u);
   std::int32_t disp = static_cast<std::int32_t>(word & 0x0000FFFCu);
   if (disp & 0x00008000) disp |= static_cast<std::int32_t>(0xFFFF0000u);
   d.branch_displacement = disp;
