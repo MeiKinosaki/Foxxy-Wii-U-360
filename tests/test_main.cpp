@@ -39,8 +39,9 @@ int main() {
  check(permissions.regions().size()==1, "region metadata available");
  Emulator emu(64);
  check(emu.cpu().pc==0&&!emu.cpu().halted, "CPU initial state");
- check(!emu.step(), "unmapped fetch fails safely");
- check(emu.cpu().exception_code == 1 && emu.cpu().exception_pc == 0, "fetch fault diagnostic");
+ emu.cpu().pc = 64;
+ check(!emu.step(), "out-of-range fetch fails safely");
+ check(emu.cpu().exception_code == 1 && emu.cpu().exception_pc == 64, "fetch fault diagnostic");
  Emulator cpu(64);
  check(cpu.bus().write32be(0, 0x38600001u), "write addi instruction");
  check(cpu.bus().write32be(4, 0x606300FFu), "write ori instruction");
