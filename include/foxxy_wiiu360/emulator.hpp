@@ -12,6 +12,9 @@ struct CpuState {
  std::uint32_t cr = 0;
  std::uint32_t xer = 0;
  bool halted = false;
+ std::uint32_t exception_pc = 0;
+ std::uint32_t exception_code = 0;
+ std::uint64_t instructions_executed = 0;
 };
 class Emulator {
 public:
