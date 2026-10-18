@@ -1,11 +1,10 @@
 #include "foxxy_wiiu360/emulator.hpp"
 #include <cstdlib>
 #include <iostream>
-#include <limits>
 #include <vector>
 using namespace foxxy_wiiu360;
 static void check(bool ok, const char* msg) {
- if (!ok) { std::cerr << "FAIL: " << msg << '\\n'; std::exit(1); }
+ if (!ok) { std::cerr << "FAIL: " << msg << '\n'; std::exit(1); }
 }
 int main() {
  MemoryBus bus(16);
@@ -41,5 +40,5 @@ int main() {
  Emulator emu(64);
  check(emu.cpu().pc==0&&!emu.cpu().halted, "CPU initial state");
  check(!emu.step(), "instruction execution not implemented");
- std::cout << "Foxxy-Wii-U-360 memory tests passed.\\n";
+ std::cout << "Foxxy-Wii-U-360 memory tests passed.\n";
 }
