@@ -45,6 +45,54 @@ bool Emulator::step() {
   cpu_.pc = next_pc;
   break;
  }
+ case OpcodeKind::LoadByte: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  std::uint8_t value = 0;
+  if (!bus_.read8(address, value)) { cpu_.exception_code = 3; return false; }
+  cpu_.gpr[d.rt] = value;
+  cpu_.pc = next_pc;
+  break;
+ }
+ case OpcodeKind::LoadHalf: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  std::uint16_t value = 0;
+  if (!bus_.read16be(address, value)) { cpu_.exception_code = 3; return false; }
+  cpu_.gpr[d.rt] = value;
+  cpu_.pc = next_pc;
+  break;
+ }
+ case OpcodeKind::LoadWord: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  std::uint32_t value = 0;
+  if (!bus_.read32be(address, value)) { cpu_.exception_code = 3; return false; }
+  cpu_.gpr[d.rt] = value;
+  cpu_.pc = next_pc;
+  break;
+ }
+ case OpcodeKind::StoreByte: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  if (!bus_.write8(address, static_cast<std::uint8_t>(cpu_.gpr[d.rt]))) { cpu_.exception_code = 4; return false; }
+  cpu_.pc = next_pc;
+  break;
+ }
+ case OpcodeKind::StoreHalf: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  if (!bus_.write16be(address, static_cast<std::uint16_t>(cpu_.gpr[d.rt]))) { cpu_.exception_code = 4; return false; }
+  cpu_.pc = next_pc;
+  break;
+ }
+ case OpcodeKind::StoreWord: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  if (!bus_.write32be(address, cpu_.gpr[d.rt])) { cpu_.exception_code = 4; return false; }
+  cpu_.pc = next_pc;
+  break;
+ }
  case OpcodeKind::Branch:
   if (d.link) cpu_.lr = next_pc;
   cpu_.pc = d.absolute ? static_cast<std::uint32_t>(d.branch_displacement)
