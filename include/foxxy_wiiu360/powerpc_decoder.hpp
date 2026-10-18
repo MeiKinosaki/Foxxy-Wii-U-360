@@ -9,6 +9,8 @@ struct DecodedInstruction {
  std::uint8_t rt = 0;
  std::uint8_t ra = 0;
  std::uint16_t immediate = 0;
+ std::uint8_t branch_options = 0;
+ std::uint8_t condition_bit = 0;
  std::int32_t branch_displacement = 0;
  bool absolute = false;
  bool link = false;
