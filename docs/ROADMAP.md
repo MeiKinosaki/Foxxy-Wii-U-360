@@ -1,6 +1,6 @@
 # Foxxy-Wii-U-360 roadmap
 
-Current official milestone: **v0.1b**. Recent CI failures exposed test assumptions about unmapped instruction fetches; the test was corrected to place PC outside mapped memory. The experimental core now includes LWZ/LBZ/LHZ/STW/STB/STH and big-endian 8/16/32-bit bus access, with diagnostics for fetch (1), unsupported opcode (2), read fault (3), and write fault (4). The expanded CI run is pending; do not mark the milestone validated until it passes.
+Current official milestone: **v0.3b**. Recent CI failures exposed test assumptions about unmapped instruction fetches; the test was corrected to place PC outside mapped memory. The experimental core now includes LWZ/LBZ/LHZ/STW/STB/STH and big-endian 8/16/32-bit bus access, with diagnostics for fetch (1), unsupported opcode (2), read fault (3), and write fault (4). The host CI run for the corrected test suite passed (build successful, 2/2 test executables green). This validates only the experimental host subset, not Xbox 360 execution.
 
 ## 1,000 tracked engineering tasks
 This is a plan, not a claim that 1,000 tasks are implemented. Ten workstreams contain 100 tasks each.
@@ -17,8 +17,8 @@ This is a plan, not a claim that 1,000 tasks are implemented. Ten workstreams co
 
 ## Version gates
 - v0.1b: initial foundation.
-- v0.2b: configurable memory, permissions, image loading and tests; release validation pending.
-- v0.3b: experimental decoder and partial instruction executor; current expanded test run must pass before claiming validation.
+- v0.2b: configurable memory, permissions and image loading; host tests passed.
+- v0.3b: experimental decoder/executor, branches, integer loads/stores and diagnostics; host CI passed. Current milestone.
 - v0.4b: broaden instruction semantics and controlled exception handling.
 - v0.5b: device/MMIO interfaces.
 
