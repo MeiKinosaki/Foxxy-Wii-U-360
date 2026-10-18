@@ -20,7 +20,7 @@ public:
  const MemoryBus& bus() const noexcept { return bus_; }
  CpuState& cpu() noexcept { return cpu_; }
  const CpuState& cpu() const noexcept { return cpu_; }
- // v0.1b is a validated foundation only; no PowerPC instruction executes yet.
+ // Experimental interpreter subset; unsupported instructions fail without advancing PC.
  bool step();
 private:
  MemoryBus bus_;
