@@ -22,5 +22,12 @@ int main() {
  check(bc_negative.branch_displacement == -8, "negative conditional branch displacement");
  auto absolute = decodePowerPC(0x48000002u);
  check(absolute.kind == OpcodeKind::Branch && absolute.absolute, "absolute branch flag");
+ auto bc = decodePowerPC((16u << 26) | (12u << 21) | 8u);
+ check(bc.kind == OpcodeKind::BranchConditional && bc.branch_options == 12 && bc.condition_bit == 0, "conditional branch BO/BI fields");
+ check(bc.branch_displacement == 8, "conditional branch displacement");
+ auto bc_negative = decodePowerPC((16u << 26) | (16u << 21) | 0xFFF8u);
+ check(bc_negative.branch_displacement == -8, "negative conditional branch displacement");
+ auto absolute = decodePowerPC(0x48000002u);
+ check(absolute.kind == OpcodeKind::Branch && absolute.absolute, "absolute branch flag");
  std::cout << "Foxxy-Wii-U-360 decoder tests passed.\n";
 }
