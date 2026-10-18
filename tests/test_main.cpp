@@ -40,14 +40,17 @@ int main() {
  Emulator emu(64);
  check(emu.cpu().pc==0&&!emu.cpu().halted, "CPU initial state");
  check(!emu.step(), "unmapped fetch fails safely");
+ check(emu.cpu().exception_code == 1 && emu.cpu().exception_pc == 0, "fetch fault diagnostic");
  Emulator cpu(64);
  check(cpu.bus().write32be(0, 0x38600001u), "write addi instruction");
  check(cpu.bus().write32be(4, 0x606300FFu), "write ori instruction");
  check(cpu.bus().write32be(8, 0x48000008u), "write branch instruction");
  check(cpu.step() && cpu.cpu().gpr[3] == 1 && cpu.cpu().pc == 4, "execute addi");
+ check(cpu.cpu().instructions_executed == 1, "instruction counter after addi");
  check(cpu.step() && cpu.cpu().gpr[3] == 0xFF && cpu.cpu().pc == 8, "execute ori");
  check(cpu.step() && cpu.cpu().pc == 16, "execute unconditional branch");
  check(!cpu.step(), "unmapped instruction fetch fails");
+ check(cpu.cpu().exception_code == 1 && cpu.cpu().instructions_executed == 3, "fetch diagnostic preserves execution count");
  Emulator linked(64);
  check(linked.bus().write32be(0, 0x48000009u), "write branch-and-link");
  check(linked.step() && linked.cpu().pc == 8 && linked.cpu().lr == 4, "branch-and-link updates LR");
