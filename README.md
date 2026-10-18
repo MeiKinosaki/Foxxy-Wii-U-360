@@ -2,13 +2,13 @@
 
 Projeto experimental para pesquisar a viabilidade de um emulador de Nintendo Wii U no Xbox 360 RGH/JTAG.
 
-## Estado atual
+## Estado do desenvolvimento
 
-A branch `main` contém um barramento de memória configurável, carregamento de imagens de teste, decodificador PowerPC experimental e um primeiro executor de um subconjunto de instruções inteiras: `ADDI`, `ADDIS`, `ORI`, `ORIS`, `ANDI.` e desvio incondicional `B`. Foram adicionados testes para execução, PC e LR.
+A branch `main` contém barramento de memória configurável, carregador de imagens, decodificador PowerPC experimental e execução inicial de `ADDI`, `ADDIS`, `ORI`, `ORIS`, `ANDI.` e `B`. Foi adicionada lógica experimental para `BC`, com testes para condições do CR, contador CTR e imediatos com sinal.
 
-**Validação:** os testes de memória/decodificação passaram em execução anterior do GitHub Actions. O workflow do commit mais recente, que inclui execução de instruções, ainda está em andamento; não declarar esta mudança validada até ele terminar.
+Os testes anteriores do executor passaram no GitHub Actions. Os testes ampliados de branches condicionais e decodificação foram enviados agora e ainda precisam de resultado verde para validar esse avanço.
 
-Este é apenas um núcleo experimental inicial. Não há implementação completa da CPU Espresso, MMU/TLB, GPU Latte, serviços Wii U, áudio, compatibilidade com jogos ou `default.xex` validado para Xbox 360. Instruções não suportadas retornam falha; chamadas de sistema ainda não estão implementadas.
+**Limitações:** não é um emulador jogável. A CPU Espresso completa, MMU/TLB, GPU Latte, serviços do sistema Wii U, áudio, compatibilidade com jogos e `default.xex` validado para Xbox 360 continuam por implementar. Instruções não suportadas não são executadas.
 
 ## Testes host-side
 
@@ -18,14 +18,14 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-Uma compilação host-side não comprova compatibilidade com Xbox 360.
+O teste host-side não comprova compatibilidade com Xbox 360.
 
-## Próximas versões sequenciais
+## Versões sequenciais
 
-- **v0.1b:** base inicial.
-- **v0.2b:** memória configurável e carregamento de imagens; aguarda validação completa do marco.
-- **v0.3b:** decodificador PowerPC e primeiro executor experimental; testes do commit mais recente pendentes.
-- **v0.4b:** completar semântica de instruções, branches condicionais, CR/XER/LR/CTR e falhas controladas.
+- **v0.1b:** base inicial do projeto.
+- **v0.2b:** memória configurável, permissões e carregador; validação do marco pendente.
+- **v0.3b:** decodificador e executor PowerPC experimentais, incluindo `BC`; validação dos testes ampliados pendente.
+- **v0.4b:** ampliar semântica de instruções, exceções e falhas controladas.
 - **v0.5b:** interfaces de dispositivos e MMIO.
 
-`docs/ROADMAP.md` contém 1.000 tarefas planejadas em dez áreas. Isso é um plano, não uma afirmação de que todas foram concluídas. A versão oficial só avança depois de testes aprovados e revisão do marco.
+`docs/ROADMAP.md` contém 1.000 tarefas planejadas em dez áreas. Isso não significa que todas estejam concluídas. A versão oficial só avança após implementação, testes aprovados e revisão do marco.
