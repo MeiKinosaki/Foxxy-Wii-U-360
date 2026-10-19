@@ -85,7 +85,7 @@ int main() {
  check(memory_ops.bus().write32be(12, 0xA0C40002u), "write lhz");
  check(memory_ops.bus().write32be(16, 0x98A40001u), "write stb");
  check(memory_ops.bus().write32be(20, 0xB0C40006u), "write sth");
- check(memory_ops.bus().write32be(24, 0xA0E40008u), "write lha");
+ check(memory_ops.bus().write32be(24, 0xA8E40008u), "write lha");
  check(memory_ops.bus().write16be(40, 0x8000u), "seed signed halfword");
  check(memory_ops.step() && memory_ops.cpu().gpr[3] == 0x12345678u, "execute lwz");
  check(memory_ops.step(), "execute stw");
