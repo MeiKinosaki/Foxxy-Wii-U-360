@@ -13,6 +13,8 @@ int main() {
  check(branch.kind == OpcodeKind::Branch && branch.branch_displacement == 8 && branch.link, "branch displacement and link");
  auto negative = decodePowerPC(0x4BFFFFFCu);
  check(negative.kind == OpcodeKind::Branch && negative.branch_displacement == -4, "negative branch displacement");
+ auto lha = decodePowerPC(0xA8E40008u); // lha r7,8(r4)
+ check(lha.kind == OpcodeKind::LoadHalfSigned && lha.rt == 7 && lha.ra == 4 && lha.immediate == 8, "lha signed halfword fields");
  auto unknown = decodePowerPC(0xFFFFFFFFu);
  check(unknown.kind == OpcodeKind::Unknown, "unknown instruction safely classified");
  auto bc = decodePowerPC((16u << 26) | (12u << 21) | 8u);
