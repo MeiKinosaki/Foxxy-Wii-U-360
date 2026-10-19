@@ -16,6 +16,7 @@ DecodedInstruction decodePowerPC(std::uint32_t word) {
  case 32: d.kind = OpcodeKind::LoadWord; break;  // lwz
  case 34: d.kind = OpcodeKind::LoadByte; break;  // lbz
  case 40: d.kind = OpcodeKind::LoadHalf; break;  // lhz
+ case 42: d.kind = OpcodeKind::LoadHalfSigned; break; // lha
  case 36: d.kind = OpcodeKind::StoreWord; break; // stw
  case 38: d.kind = OpcodeKind::StoreByte; break; // stb
  case 44: d.kind = OpcodeKind::StoreHalf; break; // sth
