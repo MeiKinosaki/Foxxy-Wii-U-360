@@ -63,6 +63,15 @@ bool Emulator::step() {
   cpu_.pc = next_pc;
   break;
  }
+ case OpcodeKind::LoadHalfSigned: {
+  const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
+  const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
+  std::uint16_t value = 0;
+  if (!bus_.read16be(address, value)) { cpu_.exception_code = 3; return false; }
+  cpu_.gpr[d.rt] = static_cast<std::uint32_t>(static_cast<std::int32_t>(static_cast<std::int16_t>(value)));
+  cpu_.pc = next_pc;
+  break;
+ }
  case OpcodeKind::LoadWord: {
   const std::uint32_t base = d.ra == 0 ? 0u : cpu_.gpr[d.ra];
   const std::uint32_t address = base + static_cast<std::uint32_t>(simm);
