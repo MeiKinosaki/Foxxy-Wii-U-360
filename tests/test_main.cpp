@@ -85,6 +85,8 @@ int main() {
  check(memory_ops.bus().write32be(12, 0xA0C40002u), "write lhz");
  check(memory_ops.bus().write32be(16, 0x98A40001u), "write stb");
  check(memory_ops.bus().write32be(20, 0xB0C40006u), "write sth");
+ check(memory_ops.bus().write32be(24, 0xA0E40000u), "write lha");
+ check(memory_ops.bus().write16be(40, 0x8000u), "seed signed halfword");
  check(memory_ops.step() && memory_ops.cpu().gpr[3] == 0x12345678u, "execute lwz");
  check(memory_ops.step(), "execute stw");
  std::uint32_t stored_word = 0;
@@ -95,6 +97,7 @@ int main() {
  check(memory_ops.step(), "execute sth");
  std::uint16_t stored_half = 0;
  check(memory_ops.bus().read16be(38, stored_half) && stored_half == 0x5678u, "sth writes big-endian halfword");
+ check(memory_ops.step() && memory_ops.cpu().gpr[7] == 0xFFFF8000u, "execute lha sign-extends negative halfword");
  Emulator data_fault(64);
  check(data_fault.bus().write32be(0, 0x80640000u), "write faulting lwz");
  data_fault.cpu().gpr[4] = 0x1000u;
