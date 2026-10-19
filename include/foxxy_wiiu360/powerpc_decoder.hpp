@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 namespace foxxy_wiiu360 {
-enum class OpcodeKind { Unknown, Addi, Addis, Ori, Oris, AndiDot, LoadWord, LoadHalf, LoadByte, StoreWord, StoreHalf, StoreByte, Branch, BranchConditional, Sc };
+enum class OpcodeKind { Unknown, Addi, Addis, Ori, Oris, AndiDot, LoadWord, LoadHalf, LoadHalfSigned, LoadByte, StoreWord, StoreHalf, StoreByte, Branch, BranchConditional, Sc };
 struct DecodedInstruction {
  OpcodeKind kind = OpcodeKind::Unknown;
  std::uint32_t raw = 0;
